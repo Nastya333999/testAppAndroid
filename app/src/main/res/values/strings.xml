@@ -2,4 +2,5 @@
     <string name="app_name">TestApp</string>
     <string name="get_fact">Get fact</string>
     <string name="get_random_fact">Get fact about random number</string>
+    <string name="enter_number">Enter number</string>
 </resources>

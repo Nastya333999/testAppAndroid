@@ -41,12 +41,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnRandomNumber.setOnClickListener { viewModel.randomNumberClick() }
 
         binding.btnCurentNumber.setOnClickListener {
-            val selectedNumber = editNumber.text.toString()
-            if (selectedNumber == "") {
-                Toast.makeText(this, "Enter a number", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
-            viewModel.numberFromUseClick(selectedNumber.toInt())
+            viewModel.numberFromUseClick(editNumber.text.toString())
         }
 
         numbersAdapter.setOnItemClickListener { navigateToNumberInfo(it.value) }
@@ -54,7 +49,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         collectLifecycleAware(viewModel.number) { navigateToNumberInfo(it) }
-
+        collectLifecycleAware(viewModel.error) {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        }
         collectLifecycleAware(viewModel.numbersInfo) { numbersAdapter.submitList(it) }
     }
 

@@ -21,6 +21,9 @@ class MainViewModel @Inject constructor(private val repository: NumberRepository
     private val _numbersInfo = MutableStateFlow<List<NumberInfo>>(listOf())
     val numbersInfo = _numbersInfo.asStateFlow()
 
+    private val _error = MutableSharedFlow<String>()
+    val error = _error.asSharedFlow()
+
     init {
         loadAllNumbersInfo()
     }
@@ -35,8 +38,13 @@ class MainViewModel @Inject constructor(private val repository: NumberRepository
         }
     }
 
-    fun numberFromUseClick(n: Int) {
+    fun numberFromUseClick(value: String) {
         viewModelScope.launch {
+            val n = value.toIntOrNull()
+            if (n == null) {
+                _error.emit("Enter a number")
+                return@launch
+            }
             val description = repository.getDescriptionByNumber(n)
             repository.saveNumberInfo(NumberInfo(value = n, description = description))
             loadAllNumbersInfo()
